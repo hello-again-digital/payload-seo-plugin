@@ -19,3 +19,16 @@ export interface SiteMapEntry extends TypeWithID {
 export interface SiteMapEntriesResponse {
   docs: SiteMapEntry[]
 }
+
+interface Directive {
+  type: 'Allow' | 'Disallow';
+  value: string;
+}
+export interface RobotsEntry extends TypeWithID {
+  userAgent: string;
+  directives: Directive[];
+}
+
+export interface RobotsEntriesResponse {
+  docs: RobotsEntry[]
+}

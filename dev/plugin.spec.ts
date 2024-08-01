@@ -11,6 +11,7 @@ describe('Plugin tests', () => {
   })
 
   afterAll(async () => {
+    /** @TODO Change to psql */
     await mongoose.connection.dropDatabase()
     await mongoose.connection.close()
     server.close()
@@ -27,4 +28,8 @@ describe('Plugin tests', () => {
 
     expect(newCollectionQuery.totalDocs).toEqual(1)
   })
+
+  it.todo('generates an accurate sitemap.xml')
+  it.todo('generates a robots.txt')
+  it.todo('generates a robots.txt')
 })

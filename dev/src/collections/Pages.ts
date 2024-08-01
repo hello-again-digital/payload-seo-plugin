@@ -3,6 +3,7 @@ import { CollectionConfig } from 'payload/types'
 const Pages: CollectionConfig = {
   slug: 'pages',
   auth: false,
+  // upload: true,
   admin: {
     useAsTitle: 'title',
   },

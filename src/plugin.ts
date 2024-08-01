@@ -1,14 +1,19 @@
 import type { Config, Plugin } from 'payload/config'
 import { GroupField, Field, PayloadRequest } from 'payload/types'
-import SiteMapEntries from './collections/siteMapEntries'
+import SiteMapEntries from './collections/SiteMapEntries'
 import { onInitExtension } from './onInitExtension'
-import type { PluginTypes, SiteMapEntry, SiteMapEntriesResponse } from './types'
+import type { PluginTypes, SiteMapEntry, SiteMapEntriesResponse, RobotsEntriesResponse } from './types'
 import { extendWebpackConfig } from './webpack'
 import AfterDashboard from './components/AfterDashboard'
 import addSeoProperties from './addSeoProperties'
+import RobotsEntries from './collections/RobotsEntries'
+import Redirects from './collections/Redirects'
+import SERPSchema from './collections/SERPSchema'
+import SEOEntries from './collections/SEO'
 
 type PluginType = (pluginOptions: PluginTypes) => Plugin
 
+// type PluginType2 = (pluginConfig: PluginConfig) => (config: Config) => Config;
 export const seoPlusPlugin =
   (pluginOptions: PluginTypes): Plugin =>
   (incomingConfig: Config) => {
@@ -44,7 +49,11 @@ export const seoPlusPlugin =
         const isEnabled = pluginOptions.collections?.includes(slug)
         return isEnabled ? addSeoProperties({ collection, pluginOptions }) : collection
       }) || []),
-      SiteMapEntries,
+      // SiteMapEntries,
+      // RobotsEntries,
+      // Redirects,
+      // SERPSchema,
+      addSeoProperties({ collection: SEOEntries, pluginOptions })
     ]
 
     config.endpoints = [
@@ -52,7 +61,6 @@ export const seoPlusPlugin =
       {
         path: '/sitemap.xml',
         method: 'get',
-
         handler: async (req: PayloadRequest, res) => {
           const payload = req.payload
           const entries: SiteMapEntriesResponse = await payload.find({
@@ -73,9 +81,57 @@ export const seoPlusPlugin =
           sitemapContent += '</urlset>'
 
           res.header('Content-Type', 'application/xml')
-          res.send(sitemapContent)
+          res.status(200).send(sitemapContent)
         },
       },
+      {
+        path: '/sitemap',
+        method: 'get',
+        handler: async (req, res) => {
+          const { payload } = req;
+          const entries: SiteMapEntriesResponse = await payload.find({
+            collection: 'site-map-entries',
+          })
+
+          res.status(200).send(entries.docs)
+        }
+      },
+      {
+        path: '/robots.txt',
+        method: 'get',
+        handler: async(req: PayloadRequest, res) => {
+          try {
+            const { payload } = req;
+            const entries: RobotsEntriesResponse = await payload.find({ collection: 'robots-entries' });
+            let robotsContent = '';
+  
+            entries.docs.forEach((entry) => {
+              robotsContent += `User-agent: ${entry.userAgent}\n`;
+              entry.directives.forEach((directive) => {
+                robotsContent += `${directive.type}: ${directive.value}\n`
+              })
+              robotsContent += "\n";
+            })
+            robotsContent += "Sitemap: http://127.0.0.1:3000/sitemap.xml\n";
+  
+            res.set('Content-Type', 'text/plain');
+            res.set('Cache-Control', 'public,max-age=86400');
+  
+            res.status(200).send(robotsContent.trim())
+          } catch (error) {
+            res.status(500).send('An error occured when attempting to generate robots.txt')
+          }
+        }
+      }, {
+        path: '/robots',
+        method: 'get',
+        handler: async(req, res) => {
+          const { payload } = req;
+          const entries: RobotsEntriesResponse = await payload.find({ collection: 'robots-entries' });
+
+          res.status(200).send(entries.docs)
+        }
+      }
     ]
 
     config.globals = [

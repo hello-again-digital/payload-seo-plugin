@@ -1,4 +1,4 @@
-import { buildConfig } from 'payload/config'
+import { buildConfig, Config, Plugin } from 'payload/config'
 import path from 'path'
 import Users from './collections/Users'
 import Examples from './collections/Examples'
@@ -10,7 +10,8 @@ import { slateEditor } from '@payloadcms/richtext-slate'
 import { seoPlusPlugin } from '../../src/index'
 import seo from '@payloadcms/plugin-seo'
 
-export default buildConfig({
+
+const config: Config = {
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),
@@ -38,10 +39,12 @@ export default buildConfig({
   graphQL: {
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
-  plugins: [seoPlusPlugin({ collections: ['pages'] }), seo({ collections: ['pages'] })],
+  plugins: [seoPlusPlugin({ collections: ['pages'] }) as Plugin],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI,
     },
   }),
-})
+}
+
+export default buildConfig(config)
