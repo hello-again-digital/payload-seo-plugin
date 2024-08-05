@@ -16,12 +16,14 @@
   ],
   "scripts": {
     "build": "tsc",
+    "cleantypes": "tsc --build --clean",
     "test": "cd dev && yarn test",
     "lint": "eslint src",
     "lint:fix": "eslint --fix --ext .ts,.tsx src",
     "clean": "rimraf dist && rimraf dev/yarn.lock",
     "prepublishOnly": "yarn clean && yarn build && cd dev && yarn test",
-    "build:types": "tsc --emitDeclarationOnly --outDir dist"
+    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "generate:types": "cd dev && payload generate:types && cp ./src/payload-types.ts ../src/payload-types.ts && cd .."
   },
   "author": "dev@payloadcms.com",
   "license": "MIT",
@@ -48,6 +50,7 @@
     "webpack": "^5.90.3"
   },
   "dependencies": {
+    "@types/express": "^4.17.21",
     "cross-env": "^7.0.3"
   }
 }

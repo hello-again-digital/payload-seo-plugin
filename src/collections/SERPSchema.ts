@@ -4,15 +4,17 @@ import SERPSchemaTemplateSelect from '../components/SERPSchemaTemplateSelect.tsx
 const SERPSchema: CollectionConfig = {
   slug: 'serp-schema',
   admin: {
-    useAsTitle: 'url',
+    group: 'SEO',
+    useAsTitle: 'path',
   },
   fields: [{
-    name: 'url',
-    label: 'Page URL',
+    name: 'path',
+    label: 'Page pathname',
     type: 'text',
+    unique: true,
     required: true,
     admin: {
-        description: "The URL you wish to redirect from"
+        description: "The URL path that this schema defines"
     }
   },
   //  {

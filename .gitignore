@@ -244,4 +244,9 @@ dev/generated-schema.graphql
 # Ignore dist, no need for git
 dist
 
+dev/.yarn
 dev/src/uploads
+dev/src/media
+dev/src/payload-types.ts
+
+src/payload-types.ts

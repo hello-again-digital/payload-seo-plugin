@@ -39,7 +39,7 @@ const config: Config = {
   graphQL: {
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
-  plugins: [seoPlusPlugin({ collections: ['pages'] }) as Plugin],
+  plugins: [seoPlusPlugin({ collections: ['pages'], hostname: 'http://localhost:3000' })],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI,

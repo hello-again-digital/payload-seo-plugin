@@ -3,12 +3,13 @@ import { CollectionConfig } from 'payload/types'
 const SiteMapEntries: CollectionConfig = {
   slug: 'site-map-entries',
   admin: {
+    group: 'SEO',
     useAsTitle: 'url',
   },
   fields: [
     {
-      name: 'url',
-      label: 'URL',
+      name: 'path',
+      label: 'Pathname',
       type: 'text',
       required: true,
     },

@@ -3,6 +3,7 @@ import { CollectionConfig } from 'payload/types'
 const RobotsEntries: CollectionConfig = {
   slug: 'robots-entries',
   admin: {
+    group: 'SEO',
     useAsTitle: 'userAgent',
   },
   fields: [
@@ -33,8 +34,8 @@ const RobotsEntries: CollectionConfig = {
             { label: 'Disallow', value: 'Disallow' },
           ],
         }, {
-            name: 'value',
-            label: 'Value',
+            name: 'path',
+            label: 'Page path',
             type: 'text'
         }
       ],
