@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload/types'
+import { validatePath } from '../fields/seoFields'
 
 const RobotsEntries: CollectionConfig = {
   slug: 'robots-entries',
@@ -36,7 +37,8 @@ const RobotsEntries: CollectionConfig = {
         }, {
             name: 'path',
             label: 'Page path',
-            type: 'text'
+            type: 'text',
+            validate: validatePath,
         }
       ],
     },

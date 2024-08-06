@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload/types'
+import { validatePath, validateUrl } from '../fields/seoFields'
 
 const Redirects: CollectionConfig = {
   slug: 'redirects',
@@ -11,11 +12,11 @@ const Redirects: CollectionConfig = {
     label: 'Pathname',
     type: 'text',
     required: true,
+    validate: validatePath,
     admin: {
         description: "The URL path you wish to redirect from"
     }
   }, {
-    /** @TODO - Might be an idea to include 307 and 308, or to simply use permanent: true/false */
     name: 'redirectType',
     label: 'Redirect Type',
     type: 'select',
@@ -35,6 +36,7 @@ const Redirects: CollectionConfig = {
     name: 'redirectUrl',
     label: 'Redirect URL',
     type: 'text',
+    validate: validateUrl,
     required: true,
   }]
 }

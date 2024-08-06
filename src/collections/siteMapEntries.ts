@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload/types'
+import { validatePath } from '../fields/seoFields'
 
 const SiteMapEntries: CollectionConfig = {
   slug: 'site-map-entries',
@@ -11,6 +12,7 @@ const SiteMapEntries: CollectionConfig = {
       name: 'path',
       label: 'Pathname',
       type: 'text',
+      validate: validatePath,
       required: true,
     },
 

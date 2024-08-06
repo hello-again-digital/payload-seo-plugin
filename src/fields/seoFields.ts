@@ -1,7 +1,21 @@
-import { GroupField, CollectionConfig, Field } from 'payload/types'
+import { Collection, CollectionConfig, GroupField } from 'payload/types'
 import { SeoConfig } from '../addSeoProperties'
 
-const addSeoFields = ({ collection, pluginOptions }: SeoConfig): GroupField[] => {
+export const validatePath = (value: string) => {
+  // will exclude query params, hashes and special character
+  const isValidPath = /^\/[a-zA-Z0-9-_\/]*$/.test(value);
+  if (!isValidPath) return 'Please enter a valid path'
+  return true
+}
+
+export const validateUrl = (value: string) => {
+  // works with http or https, will reject urls that have query params or hashes
+  const isValidUrl = /^(https?:\/\/[^\s\/$.?#].[^\s]*)(\/[^\s]*)?$/i.test(value);
+  if (!isValidUrl) return 'Please enter a valid URL'
+  return true
+}
+
+const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfig["fields"] => {
   return [
     {
       name: 'seo',
@@ -29,6 +43,7 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): GroupField[] =>
           name: 'path',
           type: 'text',
           required: true,
+          validate: validatePath,
           admin: {
             description: 'The url path for this page',
           },
@@ -39,6 +54,7 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): GroupField[] =>
           admin: {
             description: 'Set a canonical URL for this content.',
           },
+          validate: validateUrl,
           required: true,
         },
         /** Open Graph */
@@ -221,6 +237,7 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): GroupField[] =>
         },
       ],
     },
+
 
 
   ]

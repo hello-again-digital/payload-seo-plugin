@@ -3,7 +3,6 @@ import {  SeoFieldsDocument } from '../types'
 
 const addToSERPSchema: CollectionAfterChangeHook<SeoFieldsDocument> = async ({ doc, previousDoc, req, context }) => {
     const { serpSchema } = doc
-    console.log('new old', serpSchema, previousDoc?.serpSchema)
     const schemaHasChanged = serpSchema.schema !== previousDoc?.serpSchema?.schema;
     const pathHasChanged = doc.seo.path !== previousDoc?.seo?.path;
 
@@ -22,7 +21,6 @@ const addToSERPSchema: CollectionAfterChangeHook<SeoFieldsDocument> = async ({ d
                 schema: serpSchema.schema
             }
         })
-
     } else {
         existingEntries.docs.forEach(async (existingEntry) => {
 

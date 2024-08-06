@@ -1,5 +1,6 @@
 import { CollectionConfig } from 'payload/types'
 import SERPSchemaTemplateSelect from '../components/SERPSchemaTemplateSelect.tsx'
+import { validatePath } from '../fields/seoFields'
 
 const SERPSchema: CollectionConfig = {
   slug: 'serp-schema',
@@ -12,6 +13,7 @@ const SERPSchema: CollectionConfig = {
     label: 'Page pathname',
     type: 'text',
     unique: true,
+    validate: validatePath,
     required: true,
     admin: {
         description: "The URL path that this schema defines"

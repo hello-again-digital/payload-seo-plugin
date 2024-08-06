@@ -1,26 +1,29 @@
 import { CollectionAfterChangeHook } from 'payload/types'
-import { PayloadResult, RobotsEntriesResponse, SeoFieldsDocument } from '../types'
+import { SeoFieldsDocument } from '../types'
 
 const entryHasChanged = (doc: SeoFieldsDocument, previousDoc: SeoFieldsDocument) => {
-  const addToRobotsHasChanged = doc.robots.addToRobots !== previousDoc?.robots?.addToRobots;
-  const robotEntriesHasChanged = doc.robots.robotsEntries.some((newEntry, index) => {
-    const prevEntry = previousDoc?.robots?.robotsEntries[index]
+  const addToRobotsHasChanged = doc.robots.addToRobots !== previousDoc?.robots?.addToRobots
+  const robotEntriesHasChanged =
+    doc.robots.robotsEntries.some((newEntry, index) => {
+      const prevEntry = previousDoc?.robots?.robotsEntries[index]
       return (
-        newEntry.userAgent !== prevEntry?.userAgent ||
-        newEntry.directive !== prevEntry?.directive
+        newEntry.userAgent !== prevEntry?.userAgent || newEntry.directive !== prevEntry?.directive
       )
-  }) || doc.robots.robotsEntries.length !== previousDoc?.robots?.robotsEntries?.length
+    }) || doc.robots.robotsEntries.length !== previousDoc?.robots?.robotsEntries?.length
 
   return addToRobotsHasChanged || robotEntriesHasChanged
 }
 
-const addToRobots: CollectionAfterChangeHook<SeoFieldsDocument> = async ({ doc, req, previousDoc }) => {
+const addToRobots: CollectionAfterChangeHook<SeoFieldsDocument> = async ({
+  doc,
+  req,
+  previousDoc,
+}) => {
   const { addToRobots, robotsEntries } = doc.robots
   const robotsHasChanged = entryHasChanged(doc, previousDoc)
-  const pathHasChanged = doc.seo.path !== previousDoc?.seo?.path;
+  const pathHasChanged = doc.seo.path !== previousDoc?.seo?.path
 
-  if (!robotsHasChanged && !pathHasChanged) return;
-
+  if (!robotsHasChanged && !pathHasChanged) return
 
   if (addToRobots === 'yes') {
     robotsEntries.forEach(async newEntry => {
@@ -28,7 +31,7 @@ const addToRobots: CollectionAfterChangeHook<SeoFieldsDocument> = async ({ doc, 
         collection: 'robots-entries',
         where: { userAgent: { equals: newEntry.userAgent } },
       })
-      
+
       if (existingEntries.docs.length === 0) {
         await req.payload.create({
           collection: 'robots-entries',
@@ -85,8 +88,33 @@ const addToRobots: CollectionAfterChangeHook<SeoFieldsDocument> = async ({ doc, 
       }
     })
 
+    /** Delete */
+  } else {
+    robotsEntries.forEach(async newEntry => {
+      const existingEntries = await req.payload.find({
+        collection: 'robots-entries',
+        where: { userAgent: { equals: newEntry.userAgent } },
+      })
 
-    /** @TODO Delete */
+      if (existingEntries.docs.length > 0) {
+        for (const robot of existingEntries.docs) {
+          const updatedDirectives = robot.directives?.filter(
+            directive => directive.path !== doc.seo.path,
+          )
+          try {
+            await req.payload.update({
+              collection: 'robots-entries',
+              id: robot.id,
+              data: {
+                directives: updatedDirectives,
+              },
+            })
+          } catch (error) {
+            console.error('Error deleting path from robot entries:', error)
+          }
+        }
+      }
+    })
   }
 }
 
