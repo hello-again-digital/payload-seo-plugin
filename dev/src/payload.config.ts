@@ -9,6 +9,7 @@ import { webpackBundler } from '@payloadcms/bundler-webpack'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import { seoPlusPlugin } from '../../src/index'
 import seo from '@payloadcms/plugin-seo'
+import { Media } from './collections/Media'
 
 
 const config: Config = {
@@ -31,15 +32,20 @@ const config: Config = {
       return newConfig
     },
   },
+  localization: {
+    locales: ['en', 'es', 'de'],
+    defaultLocale: 'en',
+    fallback: true,
+  },
   editor: slateEditor({}),
-  collections: [Examples, Users, Pages],
+  collections: [Examples, Users, Pages, Media],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
   },
   graphQL: {
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
-  plugins: [seoPlusPlugin({ collections: ['pages'], hostname: 'http://localhost:3000' })],
+  plugins: [seoPlusPlugin({ collections: ['pages'], hostname: 'http://localhost:3000', uploadsCollection: 'media' })],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI,

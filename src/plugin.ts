@@ -1,16 +1,14 @@
 import type { Config, Plugin } from 'payload/config'
-import { GroupField, Field, PayloadRequest, TypeWithID } from 'payload/types'
+import { PayloadRequest } from 'payload/types'
 import SiteMapEntries from './collections/SiteMapEntries'
 import { onInitExtension } from './onInitExtension'
-import type { PluginTypes, SiteMapEntry, SiteMapEntriesResponse, RobotsEntriesResponse, SeoFieldsDocument, RobotsSeoField, PayloadResult } from './types'
+import type { PluginTypes } from './types'
 import { extendWebpackConfig } from './webpack'
 import AfterDashboard from './components/AfterDashboard'
 import addSeoProperties from './addSeoProperties'
 import RobotsEntries from './collections/RobotsEntries'
 import Redirects from './collections/Redirects'
-import SERPSchema from './collections/SERPSchema'
-import { Media } from './collections/Media'
-import { PaginatedDocs } from 'payload/dist/database/types'
+import { getRobots, getRobotsTxt, getSitemap, getSitemapXML } from './api'
 
 
 export const seoPlusPlugin =
@@ -48,86 +46,32 @@ export const seoPlusPlugin =
         const isEnabled = pluginOptions.collections?.includes(slug)
         return isEnabled ? addSeoProperties({ collection, pluginOptions }) : collection
       }) || []),
-      Media,
       SiteMapEntries,
       RobotsEntries,
       Redirects,
-      SERPSchema,
     ]
+
 
     config.endpoints = [
       ...(config.endpoints || []),
       {
         path: '/sitemap.xml',
         method: 'get',
-        handler: async (req: PayloadRequest, res) => {
-          const payload = req.payload
-          const entries = await payload.find({ collection: 'site-map-entries' })
-
-          let sitemapContent = '<?xml version="1.0" encoding="UTF-8"?>\n'
-          sitemapContent += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-
-          entries.docs.forEach(entry => {
-            sitemapContent += '  <url>\n'
-            sitemapContent += `    <loc>${pluginOptions.hostname}${entry.path}</loc>\n`
-            sitemapContent += `    <changefreq>${entry.changeFrequency}</changefreq>\n`
-            sitemapContent += `    <priority>${entry.priority}</priority>\n`
-            sitemapContent += '  </url>\n'
-          })
-
-          sitemapContent += '</urlset>'
-
-          res.header('Content-Type', 'application/xml')
-          res.status(200).send(sitemapContent)
-        },
+        handler: async (req, res) => getSitemapXML(req, res, pluginOptions),
       },
       {
         path: '/sitemap',
         method: 'get',
-        handler: async (req, res) => {
-          const { payload } = req;
-          const entries = await payload.find({
-            collection: 'site-map-entries',
-          })
-          res.status(200).send(entries.docs)
-        }
+        handler: async (req, res) => getSitemap(req, res, pluginOptions)
       },
       {
         path: '/robots.txt',
         method: 'get',
-        handler: async(req: PayloadRequest, res) => {
-          try {
-            const { payload } = req;
-            const entries = await payload.find({ collection: 'robots-entries' });
-            let robotsContent = '';
-  
-            entries.docs.forEach((entry) => {
-              robotsContent += `User-agent: ${entry.userAgent}\n`;
-              // @ts-ignore
-              entry.directives.forEach((directive) => {
-                robotsContent += `${directive.type}: ${directive.path}\n`
-              })
-              robotsContent += "\n";
-            })
-            robotsContent += "Sitemap: http://127.0.0.1:3000/sitemap.xml\n";
-  
-            res.set('Content-Type', 'text/plain');
-            res.set('Cache-Control', 'public,max-age=86400');
-  
-            res.status(200).send(robotsContent.trim())
-          } catch (error) {
-            res.status(500).send('An error occured when attempting to generate robots.txt')
-          }
-        }
+        handler: async (req, res) => getRobotsTxt(req, res, pluginOptions)
       }, {
         path: '/robots',
         method: 'get',
-        handler: async(req, res) => {
-          const { payload } = req;
-          const entries = await payload.find({ collection: 'robots-entries' });
-
-          res.status(200).send(entries.docs)
-        }
+        handler: getRobots
       }
     ]
 

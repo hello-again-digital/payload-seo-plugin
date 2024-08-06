@@ -8,7 +8,7 @@ export interface PluginTypes {
    */
   enabled?: boolean
   collections: string[]
-  uploadsCollection?: 'media',
+  uploadsCollection: string,
   hostname: string;
 }
 
@@ -27,7 +27,7 @@ export interface SiteMapEntriesResponse {
 
 interface Directive {
   type: 'Allow' | 'Disallow'
-  value: string
+  path: string
 }
 export interface RobotsDocument extends TypeWithID {
   userAgent: string
@@ -73,7 +73,7 @@ export interface SeoFieldsDocument {
     }
     sitemap: {
       addToSitemap: 'yes' | 'no',
-      sitemapPriority: number,
+      priority: number,
       changeFrequency: SitemapFrequency
     }
     robots: {
@@ -81,10 +81,6 @@ export interface SeoFieldsDocument {
       robotsEntries: Array<RobotsSeoField>
     }
     serpSchema: { schema: string }
-    // redirects: {
-    //   redirectType: RedirectCodes
-    //   redirectUrl: string
-    // }
     updatedAt: string;
     createdAt: string;
 }

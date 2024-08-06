@@ -24,6 +24,7 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfi
         {
           name: 'title',
           type: 'text',
+          localized: true,
           admin: {
             description: 'Meta title for search engines. Recommended length: 50-60 characters.',
           },
@@ -33,6 +34,7 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfi
         {
           name: 'description',
           type: 'textarea',
+          localized: true,
           admin: {
             description:
               'Meta description for search engines. Recommended length: 120-158 characters.',
@@ -61,6 +63,7 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfi
         {
           name: 'ogTitle',
           type: 'text',
+          localized: true,
           admin: {
             description: 'Custom title for social media sharing (Open Graph).',
           },
@@ -68,11 +71,11 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfi
         {
           name: 'ogDescription',
           type: 'textarea',
+          localized: true,
           admin: {
             description: 'Custom description for social media sharing (Open Graph).',
           },
         },
-
         {
           name: 'image',
           type: 'upload',
@@ -82,7 +85,16 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfi
           },
           label: 'Meta Image',
           localized: true,
-          relationTo: 'media',
+          relationTo: pluginOptions.uploadsCollection,
+        },
+        {
+          name: 'serpSchema',
+          label: 'SERP Schema',
+          type: 'textarea',
+          required: false,
+          admin: {
+            description: 'Define your SERP schema here',
+          },
         },
       ],
       label: 'SEO',
@@ -105,8 +117,9 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfi
           },
         },
         {
-          name: 'sitemapPriority',
+          name: 'priority',
           type: 'select',
+          required: true,
           options: [
             { label: '0.0', value: '0.0' },
             { label: '0.1', value: '0.1' },
@@ -146,100 +159,6 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfi
         },
       ],
     },
-    /** Robots Entries */
-    {
-      name: 'robots', // required
-      type: 'group', // required
-      fields: [
-        {
-          name: 'addToRobots',
-          type: 'select',
-          options: [
-            { label: 'Yes', value: 'yes' },
-            { label: 'No', value: 'no' },
-          ],
-          admin: {
-            description: 'Include page in robots.txt for search engines to crawl.',
-          },
-        },
-        {
-          name: 'robotsEntries',
-          label: 'Entry',
-          type: 'array',
-          minRows: 1,
-          labels: {
-            singular: 'Entry',
-            plural: 'Entries',
-          },
-          admin: {
-            condition: (data, siblingData) => siblingData.addToRobots === 'yes',
-          },
-          fields: [
-            {
-              name: 'userAgent',
-              label: 'User Agent',
-              type: 'text',
-              required: true,
-              admin: {
-                description: 'Which user agent are you targetting with this rule',
-                // condition: (data, siblingData) => siblingData.addToRobots === 'yes',
-              },
-            },
-            {
-              name: 'directive',
-              label: 'Directive',
-              type: 'select',
-              options: [
-                { label: 'Allow', value: 'Allow' },
-                { label: 'Disallow', value: 'Disallow' },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    /** SERP Schema */
-    {
-      name: 'serpSchema',
-      type: 'group',
-      fields: [
-        //   {
-        //   name: 'url',
-        //   label: 'Page URL',
-        //   type: 'text',
-        //   required: true,
-        //   admin: {
-        //       description: "The URL you wish to redirect from"
-        //   }
-        // },
-        //  {
-        //   name: 'template',
-        //   label: 'Schema template',
-        //   type: 'select',
-        //   required: true,
-        //   options: [
-        //     { label: "label", value: 'value' }
-        //   ],
-        //   admin: {
-        //     components: {
-        //       Field: SERPSchemaTemplateSelect
-        //     }
-        //   }
-        // },
-        {
-          name: 'schema',
-          label: 'SERP Schema',
-          type: 'textarea',
-          required: false,
-          admin: {
-            description: 'Define your SERP schema here',
-          },
-        },
-      ],
-    },
-
-
-
   ]
 }
 export default addSeoFields

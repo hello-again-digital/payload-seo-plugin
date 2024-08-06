@@ -38,6 +38,9 @@ const Redirects: CollectionConfig = {
     type: 'text',
     validate: validateUrl,
     required: true,
+    admin: {
+      description: "The URL you wish to redirect to"
+  }
   }]
 }
 

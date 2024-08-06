@@ -22,8 +22,7 @@
     "lint:fix": "eslint --fix --ext .ts,.tsx src",
     "clean": "rimraf dist && rimraf dev/yarn.lock",
     "prepublishOnly": "yarn clean && yarn build && cd dev && yarn test",
-    "build:types": "tsc --emitDeclarationOnly --outDir dist",
-    "generate:types": "cd dev && payload generate:types && cp ./src/payload-types.ts ../src/payload-types.ts && cd .."
+    "build:types": "tsc --emitDeclarationOnly --outDir dist"
   },
   "author": "dev@payloadcms.com",
   "license": "MIT",
