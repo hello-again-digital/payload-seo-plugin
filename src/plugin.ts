@@ -1,13 +1,11 @@
 import type { Config, Plugin } from 'payload/config'
 import { PayloadRequest } from 'payload/types'
-import SiteMapEntries from './collections/SiteMapEntries'
 import { onInitExtension } from './onInitExtension'
 import type { PluginTypes } from './types'
 import { extendWebpackConfig } from './webpack'
 import AfterDashboard from './components/AfterDashboard'
 import addSeoProperties from './addSeoProperties'
-import RobotsEntries from './collections/RobotsEntries'
-import Redirects from './collections/Redirects'
+import { SiteMapEntries, RobotsEntries, Redirects } from "./collections"
 import { getRobots, getRobotsTxt, getSitemap, getSitemapXML } from './api'
 
 

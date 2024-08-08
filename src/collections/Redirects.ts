@@ -1,7 +1,7 @@
 import { CollectionConfig } from 'payload/types'
 import { validatePath, validateUrl } from '../fields/seoFields'
 
-const Redirects: CollectionConfig = {
+export const Redirects: CollectionConfig = {
   slug: 'redirects',
   admin: {
     group: 'SEO',
@@ -43,5 +43,3 @@ const Redirects: CollectionConfig = {
   }
   }]
 }
-
-export default Redirects

@@ -1,7 +1,7 @@
 import { CollectionConfig } from 'payload/types'
 import { validatePath } from '../fields/seoFields'
 
-const SiteMapEntries: CollectionConfig = {
+export const SiteMapEntries: CollectionConfig = {
   slug: 'site-map-entries',
   admin: {
     group: 'SEO',
@@ -35,4 +35,3 @@ const SiteMapEntries: CollectionConfig = {
   ],
 }
 
-export default SiteMapEntries

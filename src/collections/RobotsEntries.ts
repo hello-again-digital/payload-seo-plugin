@@ -1,7 +1,7 @@
 import { CollectionConfig } from 'payload/types'
 import { validatePath } from '../fields/seoFields'
 
-const RobotsEntries: CollectionConfig = {
+export const RobotsEntries: CollectionConfig = {
   slug: 'robots-entries',
   admin: {
     group: 'SEO',
@@ -44,5 +44,3 @@ const RobotsEntries: CollectionConfig = {
     },
   ],
 }
-
-export default RobotsEntries
