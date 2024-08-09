@@ -1,9 +1,8 @@
 {
-  "name": "flexi-seo",
+  "name": "payload-seo-plugin",
   "version": "0.0.0=1",
-  "homepage:": "https://payloadcms.com",
-  "repository": "git@github.com:payloadcms/payload-plugin-template.git",
-  "description": "Blank plugin template for Payload",
+  "repository": "git@github.com:hello-again-digital/payload-seo-plugin.git",
+  "description": "A plugin for payload CMS that allows for the configuration of SEO",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "keywords": [
@@ -24,7 +23,7 @@
     "prepublishOnly": "yarn clean && yarn build && cd dev && yarn test",
     "build:types": "tsc --emitDeclarationOnly --outDir dist"
   },
-  "author": "dev@payloadcms.com",
+  "author": "tech@helloagain.com.au",
   "license": "MIT",
   "peerDependencies": {
     "payload": "^2.0.0"

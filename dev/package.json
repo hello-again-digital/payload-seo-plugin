@@ -1,6 +1,6 @@
 {
-  "name": "Payload2Blank",
-  "description": "A blank template to get started with Payload",
+  "name": "seo-plugin-dev",
+  "description": "The dev environment for testing the HA Payload SEO plugin",
   "version": "1.0.0",
   "main": "dist/server.js",
   "license": "MIT",
