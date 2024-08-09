@@ -25,9 +25,6 @@
   },
   "author": "tech@helloagain.com.au",
   "license": "MIT",
-  "peerDependencies": {
-    "payload": "^2.0.0"
-  },
   "devDependencies": {
     "@payloadcms/eslint-config": "^0.0.1",
     "@swc/jest": "^0.2.28",
