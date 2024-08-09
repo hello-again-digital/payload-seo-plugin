@@ -1,4 +1,4 @@
-import { CollectionConfig, CollectionAfterDeleteHook } from 'payload/types'
+import { CollectionConfig, CollectionAfterDeleteHook } from 'payload'
 import { PluginTypes, SeoFieldsDocument } from './types'
 import seoFields from './fields/seoFields'
 

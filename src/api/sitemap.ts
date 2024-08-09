@@ -1,7 +1,6 @@
-import { PayloadRequest, TypeWithID } from "payload/types";
+import { CollectionSlug, PayloadRequest, TypeWithID } from "payload";
 import { PluginTypes, SeoFieldsDocument } from "../types";
-import { Response } from "express";
-import { Payload } from "payload";
+import { Payload, PayloadHandler } from "payload";
 import { PaginatedDocs } from "payload/dist/database/types";
 
 interface SitemapData {
@@ -20,7 +19,7 @@ const getAllSitemapEntries = async (payload: Payload, pluginOptions: PluginTypes
 
     const pluginDocs = (await Promise.all(pluginOptions.collections
         .map(async (collection) => {
-          const entries = await payload.find({ collection: collection }) 
+          const entries = await payload.find({ collection: collection as CollectionSlug }) 
           return entries.docs 
         })
       )).flat() as unknown as SeoFieldsDocument[]
@@ -58,15 +57,20 @@ export const generateSitemapXML = (data: SitemapData[], hostname: string) => {
   return sitemapContent
 }
 
-export const getSitemapXML = async (req: PayloadRequest, res: Response, pluginOptions: PluginTypes) => {
+export const getSitemapXML = async (req: PayloadRequest, pluginOptions: PluginTypes) => {
     const allSitemapEntries = await getAllSitemapEntries(req.payload, pluginOptions)
     const sitemapContent = generateSitemapXML(allSitemapEntries, pluginOptions.hostname)
-    res.header('Content-Type', 'application/xml')
-    res.status(200).send(sitemapContent)
+    // res.header('Content-Type', 'application/xml')
+    // res.status(200).send(sitemapContent)
+    return new Response(sitemapContent, {
+      headers: { 'Content-Type': 'application/xml' },
+      status: 200,
+    })
 }
 
 
-export const getSitemap = async (req: PayloadRequest, res: Response, pluginOptions: PluginTypes) => {
+export const getSitemap = async (req: PayloadRequest, pluginOptions: PluginTypes) => {
     const allSitemapEntries = await getAllSitemapEntries(req.payload, pluginOptions)
-    res.status(200).send(allSitemapEntries)
+    // res.status(200).send(allSitemapEntries)
+    return Response.json({ data: allSitemapEntries })
   }

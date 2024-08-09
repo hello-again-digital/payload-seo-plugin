@@ -1,5 +1,4 @@
-import { Response } from "express";
-import { PayloadRequest, TypeWithID } from "payload/types";
+import { PayloadRequest, TypeWithID } from "payload";
 import { PluginTypes, RobotsDocument, RobotsEntriesResponse } from "../types";
 import { PaginatedDocs } from "payload/dist/database/types";
 
@@ -18,28 +17,38 @@ export const generateRobotsTxt = (robotsData: RobotsDocument[], hostname: string
   return robotsContent.trim();
 }
 
-export const getRobotsTxt = async (req: PayloadRequest, res: Response, pluginOptions: PluginTypes) => {
+export const getRobotsTxt = async (req: PayloadRequest, pluginOptions: PluginTypes) => {
     try {
         const { payload } = req;
         const entries = await payload.find({ collection: 'robots-entries' }) as unknown as PaginatedDocs<RobotsDocument>
 
         const robotsContent = generateRobotsTxt(entries.docs, pluginOptions.hostname)
         
-        res.set('Content-Type', 'text/plain');
-        res.set('Cache-Control', 'public,max-age=86400');
+        // res.set('Content-Type', 'text/plain');
+        // res.set('Cache-Control', 'public,max-age=86400');
 
-        res.status(200).send(robotsContent.trim())
+        // res.status(200).send(robotsContent.trim())
+
+        return new Response(robotsContent.trim(), {
+          headers: { 'Content-Type': 'text/plain' },
+          status: 200
+        })
+    
       } catch (error) {
-        res.status(500).send('An error occured when attempting to generate robots.txt')
+        // res.status(500).send('An error occured when attempting to generate robots.txt')
+        return Response.json({ error: 'An error occured when attempting to generate robots.txt' }, { status: 500 })
       }
 }
 
-export const getRobots = async (req: PayloadRequest, res: Response) => {
+export const getRobots = async (req: PayloadRequest) => {
     try {
         const { payload } = req;
         const entries = await payload.find({ collection: 'robots-entries' });
-        res.status(200).send(entries.docs)
+        // res.status(200).send(entries.docs)
+        return Response.json({ data: entries })
     } catch (error) {
-        res.status(500).send('An error occured when attempting to fetch robots entries')
+        // res.status(500).send('An error occured when attempting to fetch robots entries')
+        return Response.json({ error: 'An error occured when attempting to fetch robots entries' }, { status: 500 })
+
     }
   }

@@ -32,6 +32,7 @@
     "@payloadcms/eslint-config": "^0.0.1",
     "@swc/jest": "^0.2.28",
     "@types/jest": "^29.5.11",
+    "@types/node": "^22.1.0",
     "@typescript-eslint/eslint-plugin": "5.12.1",
     "@typescript-eslint/parser": "5.12.1",
     "dotenv": "^8.2.0",
@@ -41,14 +42,13 @@
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^29.7.0",
-    "payload": "^2.0.14",
+    "payload": "3.0.0-beta.76",
     "prettier": "^2.7.1",
     "react": "^18.0.0",
-    "typescript": "^4.8.4",
+    "typescript": "^5.5.4",
     "webpack": "^5.90.3"
   },
   "dependencies": {
-    "@types/express": "^4.17.21",
     "cross-env": "^7.0.3"
   }
 }

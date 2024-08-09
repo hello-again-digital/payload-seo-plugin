@@ -1,56 +1,39 @@
-import { buildConfig, Config, Plugin } from 'payload/config'
+// storage-adapter-import-placeholder
+import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
-import Users from './collections/Users'
-import Examples from './collections/Examples'
-import Pages from './collections/Pages'
-import { postgresAdapter } from '@payloadcms/db-postgres'
+import { buildConfig } from 'payload'
+import { fileURLToPath } from 'url'
+import sharp from 'sharp'
 
-import { webpackBundler } from '@payloadcms/bundler-webpack'
-import { slateEditor } from '@payloadcms/richtext-slate'
-import { seoPlusPlugin } from '../../src/index'
-import seo from '@payloadcms/plugin-seo'
+import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 
+import Pages from './collections/Pages'
+import { seoPlusPlugin } from "../../src"
 
-const config: Config = {
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
+
+export default buildConfig({
   admin: {
     user: Users.slug,
-    bundler: webpackBundler(),
-    webpack: config => {
-      const newConfig = {
-        ...config,
-        resolve: {
-          ...config.resolve,
-          alias: {
-            ...(config?.resolve?.alias || {}),
-            react: path.join(__dirname, '../node_modules/react'),
-            'react-dom': path.join(__dirname, '../node_modules/react-dom'),
-            payload: path.join(__dirname, '../node_modules/payload'),
-          },
-        },
-      }
-      return newConfig
-    },
   },
-  localization: {
-    locales: ['en', 'es', 'de'],
-    defaultLocale: 'en',
-    fallback: true,
-  },
-  editor: slateEditor({}),
-  collections: [Examples, Users, Pages, Media],
+  collections: [Users, Media, Pages],
+  editor: lexicalEditor(),
+  secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
-    outputFile: path.resolve(__dirname, 'payload-types.ts'),
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  graphQL: {
-    schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
-  },
-  plugins: [seoPlusPlugin({ collections: ['pages'], hostname: 'http://localhost:3000', uploadsCollection: 'media' })],
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URI,
-    },
+  db: mongooseAdapter({
+    url: process.env.DATABASE_URI || '',
   }),
-}
-
-export default buildConfig(config)
+  sharp,
+  plugins: [
+    seoPlusPlugin({
+      collections: ['pages'],
+      hostname: 'http://localhost:3000',
+      uploadsCollection: 'media'
+    })
+  ],
+})

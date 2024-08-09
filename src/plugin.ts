@@ -1,9 +1,9 @@
-import type { Config, Plugin } from 'payload/config'
-import { PayloadRequest } from 'payload/types'
-import { onInitExtension } from './onInitExtension'
+import type { Config, Plugin } from 'payload'
+import { PayloadRequest } from 'payload'
+// import { onInitExtension } from './onInitExtension'
 import type { PluginTypes } from './types'
-import { extendWebpackConfig } from './webpack'
-import AfterDashboard from './components/AfterDashboard'
+// import { extendWebpackConfig } from './webpack'
+// import AfterDashboard from './components/AfterDashboard'
 import addSeoProperties from './addSeoProperties'
 import { SiteMapEntries, RobotsEntries, Redirects } from "./collections"
 import { getRobots, getRobotsTxt, getSitemap, getSitemapXML } from './api'
@@ -15,13 +15,13 @@ export const seoPlusPlugin =
     let config = { ...incomingConfig }
 
     // If you need to add a webpack alias, use this function to extend the webpack config
-    const webpack = extendWebpackConfig(incomingConfig)
+    // const webpack = extendWebpackConfig(incomingConfig)
 
     config.admin = {
       ...(config.admin || {}),
       // If you extended the webpack config, add it back in here
       // If you did not extend the webpack config, you can remove this line
-      webpack,
+      // webpack,
 
       // Add additional admin config here
 
@@ -55,18 +55,19 @@ export const seoPlusPlugin =
       {
         path: '/sitemap.xml',
         method: 'get',
-        handler: async (req, res) => getSitemapXML(req, res, pluginOptions),
+        handler: async (req) => getSitemapXML(req, pluginOptions),
       },
       {
         path: '/sitemap',
         method: 'get',
-        handler: async (req, res) => getSitemap(req, res, pluginOptions)
+        handler: async (req) => getSitemap(req, pluginOptions)
       },
       {
         path: '/robots.txt',
         method: 'get',
-        handler: async (req, res) => getRobotsTxt(req, res, pluginOptions)
-      }, {
+        handler: async (req) => getRobotsTxt(req, pluginOptions)
+      },
+      {
         path: '/robots',
         method: 'get',
         handler: getRobots
@@ -136,7 +137,7 @@ export const seoPlusPlugin =
     config.onInit = async payload => {
       if (incomingConfig.onInit) await incomingConfig.onInit(payload)
       // Add additional onInit code by using the onInitExtension function
-      onInitExtension(pluginOptions, payload)
+      // onInitExtension(pluginOptions, payload)
     }
 
     return config

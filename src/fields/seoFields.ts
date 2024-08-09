@@ -1,14 +1,14 @@
-import { Collection, CollectionConfig, GroupField } from 'payload/types'
+import { Collection, CollectionConfig, CollectionSlug, GroupField, ValidateOptions } from 'payload'
 import { SeoConfig } from '../addSeoProperties'
 
-export const validatePath = (value: string) => {
+export const validatePath = (value: any) => {
   // will exclude query params, hashes and special character
   const isValidPath = /^\/[a-zA-Z0-9-_\/]*$/.test(value);
   if (!isValidPath) return 'Please enter a valid path'
   return true
 }
 
-export const validateUrl = (value: string) => {
+export const validateUrl = (value: any) => {
   // works with http or https, will reject urls that have query params or hashes
   const isValidUrl = /^(https?:\/\/[^\s\/$.?#].[^\s]*)(\/[^\s]*)?$/i.test(value);
   if (!isValidUrl) return 'Please enter a valid URL'
@@ -85,7 +85,7 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfi
           },
           label: 'Meta Image',
           localized: true,
-          relationTo: pluginOptions.uploadsCollection,
+          relationTo: pluginOptions.uploadsCollection as CollectionSlug,
         },
         {
           name: 'serpSchema',

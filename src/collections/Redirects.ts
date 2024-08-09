@@ -1,4 +1,4 @@
-import { CollectionConfig } from 'payload/types'
+import { CollectionConfig } from 'payload'
 import { validatePath, validateUrl } from '../fields/seoFields'
 
 export const Redirects: CollectionConfig = {
