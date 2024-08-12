@@ -1,11 +1,15 @@
 import { CollectionConfig } from 'payload'
 import { validatePath, validateUrl } from '../fields/seoFields'
+import { apiKey } from '../access/apiKey'
 
 export const Redirects: CollectionConfig = {
   slug: 'redirects',
   admin: {
     group: 'SEO',
     useAsTitle: 'path',
+  },
+  access: {
+    read: apiKey
   },
   fields: [{
     name: 'path',
@@ -14,23 +18,23 @@ export const Redirects: CollectionConfig = {
     required: true,
     validate: validatePath,
     admin: {
-        description: "The URL path you wish to redirect from"
+      description: "The URL path you wish to redirect from"
     }
   }, {
     name: 'redirectType',
     label: 'Redirect Type',
     type: 'select',
     required: true,
-    options:[
-        { label: 'Moved Permenently (301)', value: '301' },
-        { label: 'Found (302)', value: '302' },
-        { label: 'See Other (303)', value: '303' },
-        { label: 'Temporary Redirect (307)', value: '307' },
-        { label: 'Permanent Redirect (308)', value: '308' },
+    options: [
+      { label: 'Moved Permenently (301)', value: '301' },
+      { label: 'Found (302)', value: '302' },
+      { label: 'See Other (303)', value: '303' },
+      { label: 'Temporary Redirect (307)', value: '307' },
+      { label: 'Permanent Redirect (308)', value: '308' },
     ],
     admin: {
       description: "Which code should be used for the redirect. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/301"
-  }
+    }
 
   }, {
     name: 'redirectUrl',
@@ -40,6 +44,6 @@ export const Redirects: CollectionConfig = {
     required: true,
     admin: {
       description: "The URL you wish to redirect to"
-  }
+    }
   }]
 }
