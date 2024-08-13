@@ -1,6 +1,7 @@
 import { CollectionConfig } from 'payload'
 import { validatePath, validateUrl } from '../fields/seoFields'
-import { apiKey } from '../access/apiKey'
+import { apiKeyOrAuthenticated } from '../access/apiKeyOrAuthenticated'
+import { authenticated } from '../access/authenticated'
 
 export const Redirects: CollectionConfig = {
   slug: 'redirects',
@@ -9,7 +10,11 @@ export const Redirects: CollectionConfig = {
     useAsTitle: 'path',
   },
   access: {
-    read: apiKey
+    admin: authenticated,
+    create: authenticated,
+    delete: authenticated,
+    update: authenticated,
+    read: apiKeyOrAuthenticated
   },
   fields: [{
     name: 'path',

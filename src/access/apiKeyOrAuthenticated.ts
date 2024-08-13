@@ -2,7 +2,11 @@ import type { AccessArgs, User } from 'payload'
 
 type isApiKeyValid = (args: AccessArgs<User>) => boolean
 
-export const apiKey: isApiKeyValid = ({ req: { headers } }) => {
+export const apiKeyOrAuthenticated: isApiKeyValid = ({ req: { headers, user } }) => {
+  if (user) {
+    return true
+  }
+
   const apiKey = headers.get('apiKey')
   if (!apiKey) {
     console.warn('`apiKey` is not defined in the request header')
