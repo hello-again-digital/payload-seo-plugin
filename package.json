@@ -42,6 +42,7 @@
     "payload": "3.0.0-beta.76",
     "prettier": "^2.7.1",
     "react": "^18.0.0",
+    "rimraf": "^6.0.1",
     "typescript": "^5.5.4",
     "webpack": "^5.90.3"
   },
