@@ -96,6 +96,15 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfi
             description: 'Define your SERP schema here',
           },
         },
+        {
+          name: 'isIndexed',
+          type: 'checkbox',
+          admin: {
+            description: 'Uncheck to hide the page from search engine using noindex.',
+          },
+          defaultValue: true,
+          required: true,
+        },
       ],
       label: 'SEO',
     },
