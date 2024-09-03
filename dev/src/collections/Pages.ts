@@ -19,9 +19,7 @@ const Pages: CollectionConfig = {
       type: 'richText',
     },
   ],
-  hooks:{
-
-  }
+  hooks: {},
 }
 
 export default Pages

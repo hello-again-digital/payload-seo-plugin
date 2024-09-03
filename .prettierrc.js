@@ -1,8 +1,8 @@
 module.exports = {
   printWidth: 100,
-  parser: "typescript",
-  semi: false,
+  // parser: 'typescript',
+  semi: true,
   singleQuote: true,
-  trailingComma: "all",
-  arrowParens: "avoid",
+  trailingComma: 'all',
+  arrowParens: 'avoid',
 };

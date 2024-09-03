@@ -10,7 +10,7 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 
 import Pages from './collections/Pages'
-import { seoPlusPlugin } from "../../src"
+import { seoPlusPlugin } from '../../src'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -33,7 +33,7 @@ export default buildConfig({
     seoPlusPlugin({
       collections: ['pages'],
       hostname: 'http://localhost:3000',
-      uploadsCollection: 'media'
-    })
+      uploadsCollection: 'media',
+    }),
   ],
 })

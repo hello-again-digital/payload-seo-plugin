@@ -1,18 +1,16 @@
-import type { Config, Plugin } from 'payload'
-import { PayloadRequest } from 'payload'
+import type { Config, Plugin, PayloadRequest } from 'payload';
 // import { onInitExtension } from './onInitExtension'
-import type { PluginTypes } from './types'
+import type { PluginTypes } from './types';
 // import { extendWebpackConfig } from './webpack'
 // import AfterDashboard from './components/AfterDashboard'
-import addSeoProperties from './addSeoProperties'
-import { SiteMapEntries, RobotsEntries, Redirects } from "./collections"
-import { getRobots, getRobotsTxt, getSitemap, getSitemapXML } from './api'
-
+import addSeoProperties from './addSeoProperties';
+import { SiteMapEntries, RobotsEntries, Redirects } from './collections';
+import { getRobots, getRobotsTxt, getSitemap, getSitemapXML } from './api';
 
 export const seoPlusPlugin =
   (pluginOptions: PluginTypes): Plugin =>
   (incomingConfig: Config) => {
-    let config = { ...incomingConfig }
+    const config = { ...incomingConfig };
 
     // If you need to add a webpack alias, use this function to extend the webpack config
     // const webpack = extendWebpackConfig(incomingConfig)
@@ -30,64 +28,63 @@ export const seoPlusPlugin =
         // Add additional admin components here
         // afterDashboard: [...(config.admin?.components?.afterDashboard || []), AfterDashboard],
       },
-    }
+    };
 
     // If the plugin is disabled, return the config without modifying it
     // The order of this check is important, we still want any webpack extensions to be applied even if the plugin is disabled
     if (pluginOptions.enabled === false) {
-      return config
+      return config;
     }
 
     config.collections = [
       ...(config?.collections?.map(collection => {
-        const { slug } = collection
-        const isEnabled = pluginOptions.collections?.includes(slug)
-        return isEnabled ? addSeoProperties({ collection, pluginOptions }) : collection
+        const { slug } = collection;
+        const isEnabled = pluginOptions.collections?.includes(slug);
+        return isEnabled ? addSeoProperties({ collection, pluginOptions }) : collection;
       }) || []),
       SiteMapEntries,
       RobotsEntries,
       Redirects,
-    ]
-
+    ];
 
     config.endpoints = [
       ...(config.endpoints || []),
       {
         path: '/sitemap.xml',
         method: 'get',
-        handler: async (req) => getSitemapXML(req, pluginOptions),
+        handler: async req => getSitemapXML(req, pluginOptions),
       },
       {
         path: '/sitemap',
         method: 'get',
-        handler: async (req) => getSitemap(req, pluginOptions)
+        handler: async req => getSitemap(req, pluginOptions),
       },
       {
         path: '/robots.txt',
         method: 'get',
-        handler: async (req) => getRobotsTxt(req, pluginOptions)
+        handler: async req => getRobotsTxt(req, pluginOptions),
       },
       {
         path: '/robots',
         method: 'get',
-        handler: getRobots
-      }
-    ]
+        handler: getRobots,
+      },
+    ];
 
     config.globals = [
       ...(config.globals || []),
       // Add additional globals here
-    ]
+    ];
 
     config.hooks = {
       ...(config.hooks || {}),
       // Add additional hooks here
-    }
+    };
 
     config.graphQL = {
       ...(config.graphQL || {}),
       queries: (GraphQL, payload) => {
-        const existingQueries = config.graphQL?.queries || {}
+        const existingQueries = config.graphQL?.queries || {};
 
         return {
           ...existingQueries,
@@ -103,42 +100,42 @@ export const seoPlusPlugin =
               __: unknown,
               context: { req: PayloadRequest },
             ): Promise<{ content: string }> => {
-              const { payload } = context.req
+              const { payload } = context.req;
               const entries = await payload.find({
                 collection: 'site-map-entries',
-              })
+              });
 
-              let sitemapContent = '<?xml version="1.0" encoding="UTF-8"?>\n'
-              sitemapContent += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+              let sitemapContent = '<?xml version="1.0" encoding="UTF-8"?>\n';
+              sitemapContent += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
               entries.docs.forEach(entry => {
-                sitemapContent += '  <url>\n'
-                sitemapContent += `    <loc>${pluginOptions.hostname}${entry.path}</loc>\n`
-                sitemapContent += `    <changefreq>${entry.changeFrequency}</changefreq>\n`
-                sitemapContent += `    <priority>${entry.priority}</priority>\n`
-                sitemapContent += '  </url>\n'
-              })
+                sitemapContent += '  <url>\n';
+                sitemapContent += `    <loc>${pluginOptions.hostname}${entry.path}</loc>\n`;
+                sitemapContent += `    <changefreq>${entry.changeFrequency}</changefreq>\n`;
+                sitemapContent += `    <priority>${entry.priority}</priority>\n`;
+                sitemapContent += '  </url>\n';
+              });
 
-              sitemapContent += '</urlset>'
+              sitemapContent += '</urlset>';
 
-              return { content: sitemapContent }
+              return { content: sitemapContent };
             },
           },
-        }
+        };
       },
-    }
+    };
 
     config.upload = {
       limits: {
         fileSize: 5000000, // 5MB, written in bytes
       },
-    },
+    };
 
     config.onInit = async payload => {
-      if (incomingConfig.onInit) await incomingConfig.onInit(payload)
+      if (incomingConfig.onInit) await incomingConfig.onInit(payload);
       // Add additional onInit code by using the onInitExtension function
       // onInitExtension(pluginOptions, payload)
-    }
+    };
 
-    return config
-  }
+    return config;
+  };

@@ -1,28 +1,28 @@
-import type { AccessArgs, User } from 'payload'
+import type { AccessArgs, User } from 'payload';
 
-type isApiKeyValid = (args: AccessArgs<User>) => boolean
+type isApiKeyValid = (args: AccessArgs<User>) => boolean;
 
 export const apiKeyOrAuthenticated: isApiKeyValid = ({ req: { headers, user } }) => {
   if (user) {
-    return true
+    return true;
   }
 
-  const apiKey = headers.get('apiKey')
+  const apiKey = headers.get('apiKey');
   if (!apiKey) {
-    console.warn('`apiKey` is not defined in the request header')
-    return false
+    console.warn('`apiKey` is not defined in the request header');
+    return false;
   }
 
-  const validApiKey = process.env.PAYLOAD_SEO_API_KEY
+  const validApiKey = process.env.PAYLOAD_SEO_API_KEY;
   if (!validApiKey) {
-    console.warn('`PAYLOAD_SEO_API_KEY` is not defined in .env')
-    return false
+    console.warn('`PAYLOAD_SEO_API_KEY` is not defined in .env');
+    return false;
   }
 
   if (apiKey === validApiKey) {
-    return true
+    return true;
   }
 
-  console.error('`apikey` is not valid')
-  return false
-}
+  console.error('`apikey` is not valid');
+  return false;
+};

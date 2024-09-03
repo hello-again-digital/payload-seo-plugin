@@ -1,5 +1,5 @@
-import { CollectionConfig } from 'payload'
-import { validatePath } from '../fields/seoFields'
+import type { CollectionConfig } from 'payload';
+import { validatePath } from '../fields/seoFields';
 
 export const RobotsEntries: CollectionConfig = {
   slug: 'robots-entries',
@@ -16,7 +16,8 @@ export const RobotsEntries: CollectionConfig = {
       admin: {
         description: 'Which user agent are you targetting with this rule',
       },
-    }, {
+    },
+    {
       name: 'directives',
       label: 'Directive',
       type: 'array',
@@ -34,13 +35,14 @@ export const RobotsEntries: CollectionConfig = {
             { label: 'Allow', value: 'Allow' },
             { label: 'Disallow', value: 'Disallow' },
           ],
-        }, {
-            name: 'path',
-            label: 'Page path',
-            type: 'text',
-            validate: validatePath,
-        }
+        },
+        {
+          name: 'path',
+          label: 'Page path',
+          type: 'text',
+          validate: validatePath,
+        },
       ],
     },
   ],
-}
+};

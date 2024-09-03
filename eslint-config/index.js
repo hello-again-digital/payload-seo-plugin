@@ -12,4 +12,4 @@ module.exports = {
     browser: true,
     node: true,
   },
-}
+};

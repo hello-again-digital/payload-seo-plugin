@@ -2,7 +2,7 @@ module.exports = {
   rules: {
     'prefer-named-exports': 'off',
 
-  'prefer-destructuring': 'off',
+    'prefer-destructuring': 'off',
     // 'prefer-destructuring': ['warn', { object: true, array: true }],
     // ensure all object/arrays end with a comma
     'comma-dangle': ['error', 'always-multiline'],
@@ -18,4 +18,4 @@ module.exports = {
     // do not allow process.env access in files
     'no-process-env': 'warn',
   },
-}
+};

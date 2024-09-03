@@ -1,12 +1,11 @@
-import type { AccessArgs, User } from 'payload'
+import type { AccessArgs, User } from 'payload';
 
-
-type isAuthenticated = (args: AccessArgs<User>) => boolean
+type isAuthenticated = (args: AccessArgs<User>) => boolean;
 
 export const authenticated: isAuthenticated = ({ req: { user } }) => {
   if (user) {
-    return true
+    return true;
   }
 
-  return false
-}
+  return false;
+};

@@ -1,21 +1,22 @@
-import { Collection, CollectionConfig, CollectionSlug, GroupField, ValidateOptions } from 'payload'
-import { SeoConfig } from '../addSeoProperties'
+import type { CollectionConfig, CollectionSlug } from 'payload';
+import { Collection, GroupField, ValidateOptions } from 'payload';
+import type { SeoConfig } from '../addSeoProperties';
 
 export const validatePath = (value: any) => {
   // will exclude query params, hashes and special character
   const isValidPath = /^\/[a-zA-Z0-9-_\/]*$/.test(value);
-  if (!isValidPath) return 'Please enter a valid path'
-  return true
-}
+  if (!isValidPath) return 'Please enter a valid path';
+  return true;
+};
 
 export const validateUrl = (value: any) => {
   // works with http or https, will reject urls that have query params or hashes
   const isValidUrl = /^(https?:\/\/[^\s\/$.?#].[^\s]*)(\/[^\s]*)?$/i.test(value);
-  if (!isValidUrl) return 'Please enter a valid URL'
-  return true
-}
+  if (!isValidUrl) return 'Please enter a valid URL';
+  return true;
+};
 
-const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfig["fields"] => {
+const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfig['fields'] => {
   return [
     {
       name: 'seo',
@@ -168,6 +169,6 @@ const addSeoFields = ({ collection, pluginOptions }: SeoConfig): CollectionConfi
         },
       ],
     },
-  ]
-}
-export default addSeoFields
+  ];
+};
+export default addSeoFields;

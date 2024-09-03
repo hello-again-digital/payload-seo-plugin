@@ -6,8 +6,8 @@ Payload is built with a robust infrastructure intended to support Plugins with e
 
 To build your own Payload plugin, all you need is:
 
-* An understanding of the basic Payload concepts
-* And some JavaScript/Typescript experience
+- An understanding of the basic Payload concepts
+- And some JavaScript/Typescript experience
 
 ## Background
 
@@ -24,9 +24,9 @@ export const config = buildConfig({
   plugins: [
     // You can pass options to the plugin
     samplePlugin({
-		  enabled: true,
+      enabled: true,
     }),
-  ]
+  ],
 });
 ```
 
@@ -56,16 +56,16 @@ In the [payload-plugin-template](https://github.com/payloadcms/payload-plugin-te
 
 In the root folder, you will see various files that relate to the configuration of the plugin. We set up our environment in a similar manner in Payload core and across other projects, so hopefully these will look familiar:
 
-* **README**.md* - This contains instructions on how to use the template. When you are ready, update this to contain instructions on how to use your Plugin.
-* **package**.json* - Contains necessary scripts and dependencies. Overwrite the metadata in this file to describe your Plugin.
-* .**editorconfig** - Defines settings to maintain consistent coding styles.
-* .**eslintrc**.js - Eslint configuration for reporting on problematic patterns.
-* .**gitignore** - List specific untracked files to omit from Git.
-* .**prettierrc**.js - Configuration for Prettier code formatting.
-* **LICENSE** - As part of the open-source community, we ship all plugins with an MIT license but it is not required.
-* **tsconfig**.json - Configures the compiler options for TypeScript
+- **README**.md\* - This contains instructions on how to use the template. When you are ready, update this to contain instructions on how to use your Plugin.
+- **package**.json\* - Contains necessary scripts and dependencies. Overwrite the metadata in this file to describe your Plugin.
+- .**editorconfig** - Defines settings to maintain consistent coding styles.
+- .**eslintrc**.js - Eslint configuration for reporting on problematic patterns.
+- .**gitignore** - List specific untracked files to omit from Git.
+- .**prettierrc**.js - Configuration for Prettier code formatting.
+- **LICENSE** - As part of the open-source community, we ship all plugins with an MIT license but it is not required.
+- **tsconfig**.json - Configures the compiler options for TypeScript
 
-**IMPORTANT***: You will need to modify these files.
+**IMPORTANT\***: You will need to modify these files.
 
 #### Dev
 
@@ -77,8 +77,8 @@ The `samplePlugin` has already been installed to the `payload.config()` file in 
 plugins: [
   samplePlugin({
     enabled: false,
-  })
-]
+  }),
+];
 ```
 
 Later when you rename the plugin or add additional options, make sure to update them here.
@@ -104,14 +104,13 @@ To reiterate, the essence of a payload plugin is simply to extend the payload co
 ```ts
 export const samplePlugin =
   (pluginOptions: PluginTypes) =>
-    (incomingConfig: Config): Config => {
-      let config = { ...incomingConfig }
+  (incomingConfig: Config): Config => {
+    let config = { ...incomingConfig };
 
-      // do something cool with the config here
+    // do something cool with the config here
 
-      return config
-    }
-
+    return config;
+  };
 ```
 
 First, we receive the existing payload config along with any plugin options.
@@ -134,7 +133,7 @@ Let’s say you want to build a plugin that adds a new collection:
 config.collections = [
   ...(config.collections || []),
   // Add additional collections here
-]
+];
 ```
 
 First we spread the `config.collections` to ensure that we don’t lose the existing collections, then you can add any additional collections just as you would in a regular payload config.
@@ -145,24 +144,24 @@ This same logic is applied to other properties like admin, hooks, globals:
 config.globals = [
   ...(config.globals || []),
   // Add additional globals here
-]
+];
 
 config.hooks = {
   ...(incomingConfig.hooks || {}),
   // Add additional hooks here
-}
+};
 ```
 
 Some properties will be slightly different to extend, for instance the onInit property:
 
 ```ts
-import { onInitExtension } from './onInitExtension' // example file
+import { onInitExtension } from './onInitExtension'; // example file
 
 config.onInit = async payload => {
-  if (incomingConfig.onInit) await incomingConfig.onInit(payload)
+  if (incomingConfig.onInit) await incomingConfig.onInit(payload);
   // Add additional onInit code by defining an onInitExtension function
-  onInitExtension(pluginOptions, payload)
-}
+  onInitExtension(pluginOptions, payload);
+};
 ```
 
 If you wish to add to the onInit, you must include the async/await. We don’t use spread syntax in this case, instead you must await the existing onInit before running additional functionality.
@@ -185,7 +184,7 @@ export interface PluginTypes {
    * Enable or disable plugin
    * @default false
    */
-  enabled?: boolean
+  enabled?: boolean;
 }
 ```
 
@@ -216,11 +215,12 @@ describe('Plugin tests', () => {
 With this tutorial and the `payload-plugin-template`, you should have everything you need to start building your own plugin.
 In addition to the setup, here are other best practices aim we follow:
 
-* **Providing an enable / disable option:** For a better user experience, provide a way to disable the plugin without uninstalling it. This is especially important if your plugin adds additional webpack aliases, this will allow you to still let the webpack run to prevent errors.
-* **Include tests in your GitHub CI workflow**: If you’ve configured tests for your package, integrate them into your workflow to run the tests each time you commit to the plugin repository. Learn more about [how to configure tests into your GitHub CI workflow.](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs)
-* **Publish your finished plugin to NPM**: The best way to share and allow others to use your plugin once it is complete is to publish an NPM package. This process is straightforward and well documented, find out more [creating and publishing a NPM package here.](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
-* **Add payload-plugin topic tag**: Apply the tag **payload-plugin **to your GitHub repository. This will boost the visibility of your plugin and ensure it gets listed with [existing payload plugins](https://github.com/topics/payload-plugin).
-* **Use [Semantic Versioning](https://semver.org/) (SemVar)** - With the SemVar system you release version numbers that reflect the nature of changes (major, minor, patch). Ensure all major versions reference their Payload compatibility.
+- **Providing an enable / disable option:** For a better user experience, provide a way to disable the plugin without uninstalling it. This is especially important if your plugin adds additional webpack aliases, this will allow you to still let the webpack run to prevent errors.
+- **Include tests in your GitHub CI workflow**: If you’ve configured tests for your package, integrate them into your workflow to run the tests each time you commit to the plugin repository. Learn more about [how to configure tests into your GitHub CI workflow.](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs)
+- **Publish your finished plugin to NPM**: The best way to share and allow others to use your plugin once it is complete is to publish an NPM package. This process is straightforward and well documented, find out more [creating and publishing a NPM package here.](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
+- **Add payload-plugin topic tag**: Apply the tag **payload-plugin **to your GitHub repository. This will boost the visibility of your plugin and ensure it gets listed with [existing payload plugins](https://github.com/topics/payload-plugin).
+- **Use [Semantic Versioning](https://semver.org/) (SemVar)** - With the SemVar system you release version numbers that reflect the nature of changes (major, minor, patch). Ensure all major versions reference their Payload compatibility.
 
 # Questions
+
 Please contact [Payload](mailto:dev@payloadcms.com) with any questions about using this plugin template.

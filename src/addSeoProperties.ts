@@ -1,12 +1,13 @@
-import { CollectionConfig, CollectionAfterDeleteHook } from 'payload'
-import { PluginTypes, SeoFieldsDocument } from './types'
-import seoFields from './fields/seoFields'
+import type { CollectionConfig } from 'payload';
+import { CollectionAfterDeleteHook } from 'payload';
+import type { PluginTypes } from './types';
+import { SeoFieldsDocument } from './types';
+import seoFields from './fields/seoFields';
 
 export interface SeoConfig {
-  collection: CollectionConfig
-  pluginOptions: PluginTypes
+  collection: CollectionConfig;
+  pluginOptions: PluginTypes;
 }
-
 
 const addSeoProperties = ({ collection, pluginOptions }: SeoConfig) => {
   return {
@@ -15,7 +16,7 @@ const addSeoProperties = ({ collection, pluginOptions }: SeoConfig) => {
     hooks: {
       ...collection.hooks,
     },
-  }
-}
+  };
+};
 
-export default addSeoProperties
+export default addSeoProperties;

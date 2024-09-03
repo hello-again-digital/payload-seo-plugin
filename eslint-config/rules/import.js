@@ -35,4 +35,4 @@ module.exports = {
     'import/no-import-module-exports': 'warn',
     'import/no-cycle': 'warn',
   },
-}
+};

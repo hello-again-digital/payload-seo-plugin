@@ -1,5 +1,5 @@
-import { CollectionConfig } from 'payload'
-import { validatePath } from '../fields/seoFields'
+import type { CollectionConfig } from 'payload';
+import { validatePath } from '../fields/seoFields';
 
 export const SiteMapEntries: CollectionConfig = {
   slug: 'site-map-entries',
@@ -33,5 +33,4 @@ export const SiteMapEntries: CollectionConfig = {
       required: true,
     },
   ],
-}
-
+};
